@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             currentImage.setImageResource(R.drawable.tic_tac_toe_o);
             previousElementState = ElementState.O;
         }
-        currentImage.animate().translationYBy(1000f).setDuration(10);
+        currentImage.animate().translationYBy(1000f).setDuration(0);
 
         isGameOver();
     }
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // First Cross - 2,4,6
-        ImageView imageView2 = (ImageView) ticTacToeBox.getChildAt(0);
+        ImageView imageView2 = (ImageView) ticTacToeBox.getChildAt(2);
         ImageView imageView6 = (ImageView) ticTacToeBox.getChildAt(6);
         if (areAllThreeEqual(imageView2.getDrawable(), imageView4.getDrawable(), imageView6.getDrawable())) {
             return true;
@@ -156,14 +156,8 @@ public class MainActivity extends AppCompatActivity {
      * Checks if the given three drawables are equal. If they are equal sets the winner value as well.
      */
     private boolean areAllThreeEqual(Drawable... drawables) {
-
-        System.out.println("Tharun1");
-
         for (Drawable drawable : drawables) {
-            System.out.println("Tharun2 drawable == null : ");
-            System.out.println(drawable == null);
             if (drawable == null) {
-                System.out.println("Tharun3");
                 return false;
             }
         }
