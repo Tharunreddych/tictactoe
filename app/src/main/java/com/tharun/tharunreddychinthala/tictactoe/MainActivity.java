@@ -1,4 +1,4 @@
-package com.example.tharunreddychinthala.tictactoe;
+package com.tharun.tharunreddychinthala.tictactoe;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
