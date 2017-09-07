@@ -1,14 +1,18 @@
 package com.tharun.tharunreddychinthala.tictactoe;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -277,5 +281,38 @@ public class MainActivity extends AppCompatActivity {
         }
 
         winnerElementState = ElementState.EMPTY;
+    }
+
+
+    private void deadCodeForExamples() {
+//        final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.sound);
+//        final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+//        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+//
+//        SeekBar seekBar = (SeekBar)findViewById(R.id.seekBar);
+//        seekBar.setMax(maxVolume);
+//        seekBar.setProgress(currentVolume);
+//
+//        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+//
+//                mediaPlayer.seekTo(progress);
+//
+//                mediaPlayer.getDuration();
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
     }
 }
