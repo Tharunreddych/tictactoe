@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,8 +21,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String GAME_OVER_MESSAGE_SKELITON = "Game Over!!! %s Please click restart.";
     public static final String WINNER_MESSAGE_SKELITION = "Winnier is %s.";
     public static final String DRAW_MESSAGE_SKELITION = "Its a DRAW!!!";
-    ElementState previousElementState = ElementState.O;
-    ElementState winnerElementState = ElementState.EMPTY;
+    private ElementState previousElementState = ElementState.O;
+    private ElementState winnerElementState = ElementState.EMPTY;
+
+    private final BotPlayer botPlayer = new BotPlayer(previousElementState);
+
+    private int xWins = 0;
+    private int oWins = 0;
+    private int draws = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +42,24 @@ public class MainActivity extends AppCompatActivity {
         }
         ImageView currentImage = (ImageView) view;
         currentImage.setTranslationY(-1000f);
-        if (getElementState(currentImage) == ElementState.X) {
-            currentImage.setImageResource(R.drawable.tic_tac_toe_x);
-            previousElementState = ElementState.X;
-        } else if (getElementState(currentImage) == ElementState.O){
-            currentImage.setImageResource(R.drawable.tic_tac_toe_o);
-            previousElementState = ElementState.O;
-        }
+        currentImage.setImageResource(R.drawable.tic_tac_toe_x);
+//        if (getElementState(currentImage) == ElementState.X) {
+//            currentImage.setImageResource(R.drawable.tic_tac_toe_x);
+//            previousElementState = ElementState.X;
+//        } else if (getElementState(currentImage) == ElementState.O){
+//            currentImage.setImageResource(R.drawable.tic_tac_toe_o);
+//            previousElementState = ElementState.O;
+//        }
         currentImage.animate().translationYBy(1000f).setDuration(0);
 
+        if (isGameOver()) {
+            return;
+        }
+
+        botPlayer.play((GridLayout) findViewById(R.id.box));
+
         isGameOver();
+
     }
 
     /**
@@ -84,8 +99,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayGameOverMessage() {
+        increaseCount();
         Toast toast = Toast.makeText(getApplicationContext(), createGameOverMessage(), Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    /**
+     * Will increase count of xWins, oWins, draws
+     */
+    private void increaseCount() {
+        switch (winnerElementState) {
+            case X:
+                xWins++;
+                changeDisplay(R.id.xWinsCount, Integer.toString(xWins));
+                break;
+            case O:
+                oWins++;
+                changeDisplay(R.id.oWinsCount, Integer.toString(oWins));
+                break;
+            case EMPTY:
+                draws++;
+                changeDisplay(R.id.drawCount, Integer.toString(draws));
+                break;
+            default:
+                // Do nothing.
+        }
+    }
+
+    private void changeDisplay(int elementId, String value) {
+        TextView textView = (TextView)findViewById(elementId);
+        textView.setText(value);
     }
 
     private String createGameOverMessage() {
@@ -228,15 +271,9 @@ public class MainActivity extends AppCompatActivity {
     public void restartGame(View view) {
         previousElementState = ElementState.O;
         GridLayout ticTacToeBox = (GridLayout) findViewById(R.id.box);
-        for (int row = 0; row < 3; row++) {
-            ImageView imageViewColumn0 = (ImageView) ticTacToeBox.getChildAt((row*3 + 0));
-            imageViewColumn0.setImageDrawable(null);
 
-            ImageView imageViewColumn1 = (ImageView) ticTacToeBox.getChildAt((row*3 + 1));
-            imageViewColumn1.setImageDrawable(null);
-
-            ImageView imageViewColumn2 = (ImageView) ticTacToeBox.getChildAt((row*3 + 2));
-            imageViewColumn2.setImageDrawable(null);
+        for (int child = 0; child < ticTacToeBox.getChildCount(); child++) {
+            ((ImageView) ticTacToeBox.getChildAt(child)).setImageResource(0);
         }
 
         winnerElementState = ElementState.EMPTY;
