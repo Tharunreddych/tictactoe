@@ -10,7 +10,7 @@ import java.util.Random;
 /**
  * Bot player who plays against human.
  */
-public class BotPlayer {
+class BotPlayer {
 
     // Symbol that bot player needs to use.
     private final ElementState botPlayerSymbol;
@@ -18,46 +18,21 @@ public class BotPlayer {
     BotPlayer(ElementState botPlayerSymbol) {
         this.botPlayerSymbol = botPlayerSymbol;
     }
+
     /**
-     * Bot player chance.
-     *
-     * Will get an open spot and randomly fill that spot.
+     * Will return the position that the bot player wants to play.
+     * @param vacantPositions - vacant positions where the bot can play.
+     * @return position where bot wants to play.
      */
-    public void play(GridLayout ticTacToeBox) {
-        Integer randomInt = spotToPlay(ticTacToeBox);
-
-        ImageView botImageView = (ImageView) ticTacToeBox.getChildAt(randomInt);
-
-        switch (botPlayerSymbol) {
-            case O:
-                botImageView.setImageResource(R.drawable.tic_tac_toe_o);
-                break;
-            case X:
-                botImageView.setImageResource(R.drawable.tic_tac_toe_x);
-                break;
-            default:
-                //Do Nothing.
-        }
-
+    int getPosition(List<Integer> vacantPositions) {
+        return spotToPlay(vacantPositions);
     }
 
-    private Integer spotToPlay(GridLayout gridLayout) {
-        List<Integer> emptySpots = getEmptySpots(gridLayout);
+    private Integer spotToPlay(List<Integer> emptySpots) {
 
         Random randomGenerator = new Random();
         int index = randomGenerator.nextInt(emptySpots.size());
 
         return emptySpots.get(index);
-    }
-
-    private List<Integer> getEmptySpots(GridLayout gridLayout) {
-        List<Integer> emptySpots = new ArrayList<>();
-        for (int i = 0; i < gridLayout.getChildCount(); i++) {
-            if (((ImageView) gridLayout.getChildAt(i)).getDrawable() == null) {
-                emptySpots.add(i);
-            }
-        }
-
-        return emptySpots;
     }
 }

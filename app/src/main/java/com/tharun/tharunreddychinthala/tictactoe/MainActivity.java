@@ -28,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private ElementState previousElementState = ElementState.O;
     private ElementState winnerElementState = ElementState.EMPTY;
 
-    private final BotPlayer botPlayer = new BotPlayer(previousElementState);
+    private BotPlayer botPlayer = new BotPlayer(previousElementState);
+    private TicTacToeBoard ticTacToeBoard;
+
 
     private int xWins = 0;
     private int oWins = 0;
@@ -38,15 +40,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ticTacToeBoard = new TicTacToeBoard((TextView) findViewById(R.id.xWinsCount),
+                (TextView) findViewById(R.id.oWinsCount),
+                (TextView) findViewById(R.id.drawCount));
     }
 
     public void dropIn(View view) {
-        if (isGameOver()) {
-            return;
+        GridLayout ticTacToeBox = (GridLayout) findViewById(R.id.box);
+        Context applicationContext = getApplicationContext();
+
+        // Human Play.
+        int position = Integer.parseInt(view.getTag().toString());
+        ticTacToeBoard.fillPosition(position, ticTacToeBox, applicationContext);
+
+        if (!ticTacToeBoard.isGameOver(applicationContext)) {
+            // Bot Play.
+            ticTacToeBoard.fillPosition(botPlayer.getPosition(
+                    ticTacToeBoard.vacantPositions()), ticTacToeBox, applicationContext);
         }
-        ImageView currentImage = (ImageView) view;
-        currentImage.setTranslationY(-1000f);
-        currentImage.setImageResource(R.drawable.tic_tac_toe_x);
+    }
+
+//    public void dropIn(View view) {
+//        if (isGameOver()) {
+//            return;
+//        }
+//        ImageView currentImage = (ImageView) view;
+//        currentImage.setTranslationY(-1000f);
+//        currentImage.setImageResource(R.drawable.tic_tac_toe_x);
 //        if (getElementState(currentImage) == ElementState.X) {
 //            currentImage.setImageResource(R.drawable.tic_tac_toe_x);
 //            previousElementState = ElementState.X;
@@ -54,17 +75,17 @@ public class MainActivity extends AppCompatActivity {
 //            currentImage.setImageResource(R.drawable.tic_tac_toe_o);
 //            previousElementState = ElementState.O;
 //        }
-        currentImage.animate().translationYBy(1000f).setDuration(0);
-
-        if (isGameOver()) {
-            return;
-        }
-
-        botPlayer.play((GridLayout) findViewById(R.id.box));
-
-        isGameOver();
-
-    }
+//        currentImage.animate().translationYBy(1000f).setDuration(0);
+//
+//        if (isGameOver()) {
+//            return;
+//        }
+//
+//        botPlayer.play((GridLayout) findViewById(R.id.box));
+//
+//        isGameOver();
+//
+//    }
 
     /**
      * Will return the state the given imageView needs to be present.
@@ -273,14 +294,8 @@ public class MainActivity extends AppCompatActivity {
      * @param view button view.
      */
     public void restartGame(View view) {
-        previousElementState = ElementState.O;
         GridLayout ticTacToeBox = (GridLayout) findViewById(R.id.box);
-
-        for (int child = 0; child < ticTacToeBox.getChildCount(); child++) {
-            ((ImageView) ticTacToeBox.getChildAt(child)).setImageResource(0);
-        }
-
-        winnerElementState = ElementState.EMPTY;
+        ticTacToeBoard.restartGame(ticTacToeBox);
     }
 
 
