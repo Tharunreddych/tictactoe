@@ -49,10 +49,11 @@ class TicTacToeBoard {
      * @param position position on the board.
      * @param gridLayout layout of the board.
      * @param applicationContext coontext.
+     * @return true if the position was filled.
      */
-    void fillPosition(int position, GridLayout gridLayout, Context applicationContext) {
+    boolean fillPosition(int position, GridLayout gridLayout, Context applicationContext) {
         if (isGameOver(applicationContext)) {
-            return;
+            return false;
         }
 
         if (position > currentPositions.length) {
@@ -61,8 +62,13 @@ class TicTacToeBoard {
 
         if (currentPositions[position] == 2) {
             fillGivenPosition(position, gridLayout);
+            isGameOver(applicationContext);
+            return true;
+        } else {
+            Toast toast = Toast.makeText(applicationContext, "Please choose an unfilled position.", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
         }
-        isGameOver(applicationContext);
     }
 
     /**
